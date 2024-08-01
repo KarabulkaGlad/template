@@ -1,0 +1,19 @@
+extends ../layouts/default
+
+block variables
+  - var title = 'Главная страница'
+  - var includeHomeLink = false
+  -
+    var cardsData = [
+      {'img':'/images/card.svg', 'title':'Заголовок карточки 1', 'text':'Текст карточки 1'},
+      {'img':'/images/card.svg', 'title':'Заголовок карточки 2', 'text':'Текст карточки 2'},
+      {'img':'/images/card.svg', 'title':'Заголовок карточки 3', 'text':'Текст карточки 3'}
+    ]
+
+block content
+  include ../components/cards-list/card-list
+    block items
+      include ../components/card/card
+      each card in cardsData
+        +card(card.img, card.title, card.text)
+
