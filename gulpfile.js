@@ -107,9 +107,9 @@ function scssPages() {
     mediaQuery(),
     cssnano()
   ];
+
   return gulp.src('src/pages/*.scss')
   .pipe(sass())
-  .pipe(concat('index.css'))
   .pipe(postcss(plugins))
   .pipe(gulp.dest('dist/'))
   .pipe(browserSync.reload({stream: true}));

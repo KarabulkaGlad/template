@@ -12,7 +12,7 @@
     "fixAll": "npm run format && npm run lintfix",
     "build": "gulp build",
     "dev": "gulp",
-    "gitPush": "git add -A && git commit -m '.' && git pull && git push && git status"
+    "gitpush": "git add -A && git commit -m . && git pull && git push && git status"
   },
   "author": "",
   "license": "ISC",
