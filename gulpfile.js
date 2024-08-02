@@ -9,6 +9,7 @@ const mediaQuery = require('postcss-combine-media-query');
 const cssnano = require('cssnano');
 const htmlMinify = require('html-minifier');
 const gulpPug = require('gulp-pug');
+const sass = require('gulp-sass')(require('sass'));
 
 function html() {
   const options = {
@@ -63,7 +64,8 @@ function clean() {
 }
 
 function watchFiles() {
-  gulp.watch(['src/pages/**/*.pug'], pug);
+  gulp.watch(['src/**/*.pug'], pug);
+  gulp.watch(['src/**/*.scss'], scss);
   gulp.watch(['src/**/*.html'], html);
   gulp.watch(['src/**/*.css'], css);
   gulp.watch(['src/img/**/*.{jpg,png,svg,gif,ico,webp,avif}'], images);
@@ -79,12 +81,42 @@ function serve() {
 
 function pug() {
   return gulp.src('src/pages/**/*.pug')
-  .pipe(gulpPug({pretty: true}))
+  .pipe(gulpPug())
   .pipe(gulp.dest('dist/'))
   .pipe(browserSync.reload({stream: true}));
 }
 
-const build = gulp.series(clean, gulp.parallel(pug, css, images, fonts));
+
+function scssLayout() {
+  const plugins = [
+    autoprefixer(),
+    mediaQuery(),
+    cssnano()
+  ];
+  return gulp.src('src/layouts/default.scss')
+  .pipe(sass())
+  .pipe(concat('bundle.css'))
+  .pipe(postcss(plugins))
+  .pipe(gulp.dest('dist/'))
+  .pipe(browserSync.reload({stream: true}));
+}
+
+function scssPages() {
+  const plugins = [
+    autoprefixer(),
+    mediaQuery(),
+    cssnano()
+  ];
+  return gulp.src('src/pages/*.scss')
+  .pipe(sass())
+  .pipe(concat('index.css'))
+  .pipe(postcss(plugins))
+  .pipe(gulp.dest('dist/'))
+  .pipe(browserSync.reload({stream: true}));
+}
+
+const scss = gulp.parallel(scssLayout, scssPages)
+const build = gulp.series(clean, gulp.parallel(pug, scss, images, fonts));
 const watchapp = gulp.parallel(build, watchFiles, serve);
 
 exports.clean = clean;
@@ -93,6 +125,7 @@ exports.css = css;
 exports.html = html;
 exports.fonts = fonts;
 exports.pug = pug;
+exports.scss = scss;
 
 exports.build = build;
 exports.watchapp = watchapp;

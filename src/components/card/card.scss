@@ -7,6 +7,10 @@
   padding: 20px;
   border-radius: 10px;
   background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 10px rgb(0 0 0 / 25%);
   aspect-ratio: 3/3;
+  &__image {
+    width: 100%;
+    margin-bottom: 40px;
+  }
 }
